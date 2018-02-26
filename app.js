@@ -68,6 +68,7 @@ bot.dialog('language', [
         builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
+        console.log(results);
         console.log(results.entity);
         session.endDialogWithResult({
             response: { language: results.entity }
