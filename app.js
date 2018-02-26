@@ -45,26 +45,27 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, [
     function (session) {
-        session.send("Welcome to the dinner reservation.");
-        builder.Prompts.time(session, "Please provide a reservation date and time (e.g.: June 6th at 5pm)");
+        session.send("請選擇您要使用的語言");
+        builder.Prompts.text(session, "What's your preferred language? 請輸入中文、英文、簡中，其中一項");
     },
     function (session, results) {
-        session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.text(session, "How many people are in your party?");
+        session.dialogData.language = results.response;
+        session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
+        builder.Prompts.text(session, "請問您是要進行故障報修嗎? 請輸入是或否");
     },
     function (session, results) {
-        session.dialogData.partySize = results.response;
-        builder.Prompts.text(session, "Who's name will this reservation be under?");
+        session.dialogData.isRepair = results.response;
+        builder.Prompts.text(session, "請輸入您的統一編號");
     },
     function (session, results) {
-        session.dialogData.reservationName = results.response;
-
-        // Process request and display reservation details
-        session.send(`Reservation confirmed. Reservation details: <br/>Date/Time: ${session.dialogData.reservationDate} <br/>Party size: ${session.dialogData.partySize} <br/>Reservation name: ${session.dialogData.reservationName}`);
+        session.dialogData.customerNo = results.response;
+        session.send(`您輸入的是: ${session.dialogData.customerNo}`)
+        builder.Prompts.text(session, "請輸入您電話號碼");
+    },
+    function (session, results) {
+        session.dialogData.phone = results.response;
+        session.send(`您輸入的是: ${session.dialogData.phone}`)
+        builder.Prompts.text(session, "謝謝您的光臨，願您一切順心，再見！");
         session.endDialog();
     }
 ]).set('storage', inMemoryStorage); // Register in-memory storage 
-
-// bot.dialog('/', function (session) {
-//     session.send('You said ' + session.message.text);
-// });
