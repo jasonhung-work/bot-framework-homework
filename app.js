@@ -84,7 +84,8 @@ bot.dialog('isRepair', [
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
-            session.endDialogWithResult("謝謝您的光臨，願您一切順心，再見！", {
+            session.send("謝謝您的光臨，願您一切順心，再見！");
+            session.endDialogWithResult({
                 response: { isRepair: results.response.entity}
             });
         }
