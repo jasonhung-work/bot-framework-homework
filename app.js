@@ -76,7 +76,7 @@ bot.dialog('language', [
 bot.dialog('isRepair', [
     function (session) {
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
-        builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 1 });
+        builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 2 });
     },
     function (session, results) {
         if (results.response.entity == "yes") {
@@ -92,7 +92,7 @@ bot.dialog('isRepair', [
     function (session, results) {
         session.dialogData.customerNo = results.response;
         session.send(`您輸入的是: ${session.dialogData.customerNo}`)
-        builder.Prompts.number(session, "請輸入您電話號碼");
+        builder.Prompts.text(session, "請輸入您電話號碼");
     },
     function (session, results) {
         session.dialogData.phone = results.response;
