@@ -48,8 +48,8 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('language');
     },
     function (session, results) {
-        console.log(results);
-        if (results.response) {
+        console.log(results.response.language);
+        if (results.response.language) {
             session.beginDialog('isRepair');
         }
         else {
