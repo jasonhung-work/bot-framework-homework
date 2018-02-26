@@ -103,9 +103,7 @@ bot.dialog('isRepair', [
     function (session, results) {
         session.dialogData.phone = results.response;
         console.log(session.dialogData);
-        session.send(`您輸入的是: ${session.dialogData.phone}`)
-        builder.Prompts.text(session, "謝謝您的光臨，願您一切順心，再見！");
-        console.log(session.dialogData);
+        session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`)
         session.endDialogWithResult({ 
             response: { phone: session.dialogData.phone, customerNo: session.dialogData.customerNo } 
         });
