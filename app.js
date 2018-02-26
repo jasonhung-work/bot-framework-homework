@@ -49,7 +49,7 @@ var bot = new builder.UniversalBot(connector, [
     },
     function (session, results) {
         console.log(results);
-        if (results.response != false) {
+        if (results.response != true) {
             session.beginDialog('isRepair');
         }
         else {
