@@ -48,6 +48,7 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('language');
     },
     function (session, results) {
+        console.log(results);
         if (results.response != false) {
             session.beginDialog('isRepair');
         }
