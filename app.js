@@ -67,28 +67,19 @@ bot.dialog('language', [
         builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
-        console.log(results.response);
-        if (results.response == "中文" || results.response == "英文" || results.response == "簡中") {
             session.endDialogWithResult({ 
-                response: { language: results.response } 
+                response: { language: results.entity } 
             });
-        }
-        else {
-            session.send("不好意思，我們還未提供此語言")
-            session.endDialogWithResult({ 
-                response: { language: false } 
-            });
-        }
     }
 ]);
 
 bot.dialog('isRepair', [
     function (session) {
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
-        builder.Prompts.confirm(session, "請問您是要進行故障報修嗎? 請輸入yes或no");
+        builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 1 });
     },
     function (session, results) {
-        if (results.response) {
+        if (results.entity == "yes") {
             session.dialogData.isRepair = results.response;
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
