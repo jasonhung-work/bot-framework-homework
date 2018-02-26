@@ -64,9 +64,10 @@ var bot = new builder.UniversalBot(connector, [
 bot.dialog('language', [
     function (session) {
         session.send("請選擇您要使用的語言");
-        builder.Prompts.text(session, "What's your preferred language? 請輸入中文、英文、簡中，其中一項");
+        builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
+        console.log(results.response);
         if (results.response == "中文" || results.response == "英文" || results.response == "簡中") {
             session.endDialogWithResult({ 
                 response: { language: results.response } 
