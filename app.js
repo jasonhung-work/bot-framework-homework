@@ -69,9 +69,9 @@ bot.dialog('language', [
     },
     function (session, results) {
         console.log(results);
-        console.log(results.entity);
+        console.log(results.response.entity);
         session.endDialogWithResult({
-            response: { language: results.entity }
+            response: { language: results.response.entity }
         });
     }
 ]);
@@ -82,12 +82,14 @@ bot.dialog('isRepair', [
         builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 1 });
     },
     function (session, results) {
-        if (results.entity == "yes") {
-            session.dialogData.isRepair = results.response;
+        if (results.response.entity == "yes") {
+            session.dialogData.isRepair = "yes";
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
-            session.endDialog("謝謝您的光臨，願您一切順心，再見！");
+            session.endDialogWithResult("謝謝您的光臨，願您一切順心，再見！", {
+                response: { isRepair: results.response.entity}
+            });
         }
     },
     function (session, results) {
@@ -96,6 +98,7 @@ bot.dialog('isRepair', [
         builder.Prompts.number(session, "請輸入您電話號碼");
     },
     function (session, results) {
+        console.log(results);
         session.dialogData.phone = results.response;
         session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`)
         session.endDialogWithResult({
