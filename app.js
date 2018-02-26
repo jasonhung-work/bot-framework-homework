@@ -65,6 +65,6 @@ var bot = new builder.UniversalBot(connector, [
     }
 ]).set('storage', inMemoryStorage); // Register in-memory storage 
 
-bot.dialog('/', function (session) {
-    session.send('You said ' + session.message.text);
-});
+// bot.dialog('/', function (session) {
+//     session.send('You said ' + session.message.text);
+// });
