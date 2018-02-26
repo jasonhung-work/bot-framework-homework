@@ -83,8 +83,7 @@ bot.dialog('language', [
 ]);
 
 bot.dialog('isRepair', [
-    function (session, results) {
-        session.dialogData.language = results.response;
+    function (session) {
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
         builder.Prompts.confirm(session, "請問您是要進行故障報修嗎? 請輸入是或否");
     },
