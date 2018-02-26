@@ -48,6 +48,7 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('language');
     },
     function (session, results) {
+        console.log(results);
         if (results.response.language) {
             session.beginDialog('isRepair');
         }
@@ -67,9 +68,10 @@ bot.dialog('language', [
         builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
-            session.endDialogWithResult({ 
-                response: { language: results.entity } 
-            });
+        console.log(results.entity);
+        session.endDialogWithResult({
+            response: { language: results.entity }
+        });
     }
 ]);
 
@@ -94,10 +96,9 @@ bot.dialog('isRepair', [
     },
     function (session, results) {
         session.dialogData.phone = results.response;
-        console.log(session.dialogData);
         session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`)
-        session.endDialogWithResult({ 
-            response: { phone: session.dialogData.phone, customerNo: session.dialogData.customerNo } 
+        session.endDialogWithResult({
+            response: { phone: session.dialogData.phone, customerNo: session.dialogData.customerNo }
         });
     }
 ]);
