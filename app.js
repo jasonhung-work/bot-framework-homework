@@ -2,16 +2,25 @@
 A simple echo bot for the Microsoft Bot Framework. 
 -----------------------------------------------------------------------------*/
 
-var restify = require('restify');
+var express = require("express");
+var app = express();
+var port = process.env.PORT || 3978;
+var http = require("http");
 var builder = require('botbuilder');
 var botbuilder_azure = require("botbuilder-azure");
 
 // Setup Restify Server
-var server = restify.createServer();
-server.listen(process.env.port || process.env.PORT || 3978, function () {
+var server = http.Server(app).listen(port, function () {
    console.log('%s listening to %s', server.name, server.url); 
 });
-  
+
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
     appId: process.env.MicrosoftAppId,
