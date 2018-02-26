@@ -49,7 +49,7 @@ var bot = new builder.UniversalBot(connector, [
     },
     function (session, results) {
         console.log(results);
-        if (results.response != true) {
+        if (results.response) {
             session.beginDialog('isRepair');
         }
         else {
@@ -69,10 +69,15 @@ bot.dialog('language', [
     },
     function (session, results) {
         if (results.response == "中文" || results.response == "英文" || results.response == "簡中") {
-            session.endDialogWithResult(results.response);
+            session.endDialogWithResult({ 
+                response: { language: results.response } 
+            });
         }
         else {
-            session.endDialog("不好意思，我們還未提供此語言", false);
+            session.send("不好意思，我們還未提供此語言")
+            session.endDialogWithResult({ 
+                response: { language: false } 
+            });
         }
     }
 ]);
@@ -81,10 +86,11 @@ bot.dialog('isRepair', [
     function (session, results) {
         session.dialogData.language = results.response;
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
-        builder.Prompts.text(session, "請問您是要進行故障報修嗎? 請輸入是或否");
+        builder.Prompts.confirm(session, "請問您是要進行故障報修嗎? 請輸入是或否");
     },
     function (session, results) {
-        if (results.response == "是") {
+        console.log(results);
+        if (results.response) {
             session.dialogData.isRepair = results.response;
             builder.Prompts.text(session, "請輸入您的統一編號");
         }
@@ -101,6 +107,8 @@ bot.dialog('isRepair', [
         session.dialogData.phone = results.response;
         session.send(`您輸入的是: ${session.dialogData.phone}`)
         builder.Prompts.text(session, "謝謝您的光臨，願您一切順心，再見！");
-        session.endDialogWithResult(results);
+        session.endDialogWithResult({ 
+            response: { phone: session.dialogData.phone, customerNo: session.dialogData.customerNo } 
+        });
     }
 ]);
