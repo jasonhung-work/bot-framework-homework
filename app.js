@@ -48,7 +48,6 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('language');
     },
     function (session, results) {
-        console.log(results.response.language);
         if (results.response.language) {
             session.beginDialog('isRepair');
         }
@@ -85,13 +84,12 @@ bot.dialog('language', [
 bot.dialog('isRepair', [
     function (session) {
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
-        builder.Prompts.confirm(session, "請問您是要進行故障報修嗎? 請輸入是或否");
+        builder.Prompts.confirm(session, "請問您是要進行故障報修嗎? 請輸入yes或no");
     },
     function (session, results) {
-        console.log(results);
         if (results.response) {
             session.dialogData.isRepair = results.response;
-            builder.Prompts.text(session, "請輸入您的統一編號");
+            builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
             session.endDialog("謝謝您的光臨，願您一切順心，再見！");
@@ -100,12 +98,14 @@ bot.dialog('isRepair', [
     function (session, results) {
         session.dialogData.customerNo = results.response;
         session.send(`您輸入的是: ${session.dialogData.customerNo}`)
-        builder.Prompts.text(session, "請輸入您電話號碼");
+        builder.Prompts.number(session, "請輸入您電話號碼");
     },
     function (session, results) {
         session.dialogData.phone = results.response;
+        console.log(session.dialogData);
         session.send(`您輸入的是: ${session.dialogData.phone}`)
         builder.Prompts.text(session, "謝謝您的光臨，願您一切順心，再見！");
+        console.log(session.dialogData);
         session.endDialogWithResult({ 
             response: { phone: session.dialogData.phone, customerNo: session.dialogData.customerNo } 
         });
