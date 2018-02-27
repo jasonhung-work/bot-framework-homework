@@ -37,19 +37,8 @@ app.post('/api/messages', connector.listen());
 * For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
 * ---------------------------------------------------------------------------------------- */
 app.use(express.static("resource"));
-app.get("/language", function (request, response) {
-    console.log("GET language picture");
-    request.header("Content-Type", "image/jpeg")
-    fs.readFile(__dirname + '/resource/language.jpg', 'binary', function (err, data) {
-        if (err) {
-            console.log(err);
-            this.res.send(err);
-        }
-        this.res.send(data);
-    }.bind({ req: request, res: response }));
-});
-app.get('/download', function (request, response) {
-    var filename = 'language.jpg';
+app.get('/download/:file', function (request, response) {
+    var filename = request.params.filename;
     var stream = require('fs').createReadStream(__dirname + '/resource/' + filename);
     stream.pipe(response);
     response.clearCookie();
@@ -103,12 +92,7 @@ bot.dialog('language', function (session) {
         new builder.HeroCard(session)
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, 'https://jason-hung.azurewebsites.net/download')])
-            .buttons([
-                builder.CardAction.imBack(session, "中文", "中文 (1)"),
-                builder.CardAction.imBack(session, "English", "English (1)"),
-                builder.CardAction.imBack(session, "简中", "簡中 (1)")
-            ])
+            .images([builder.CardImage.create(session, 'https://jason-hung.azurewebsites.net/download/language.jpg')])
     ]);
     session.send(msg).endDialog();
 }).triggerAction({ matches: /^(語言|language|语言)/i });
