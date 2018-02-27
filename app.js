@@ -87,23 +87,31 @@ bot.dialog('isRepair', [
 ]).triggerAction({ matches: /^(中文|English|简中)/i });;
 
 // Add dialog to return list of shirts available
-bot.dialog('language', function (session) {
-    console.log("-----language part-----");
-    var msg = new builder.Message(session);
-    msg.attachmentLayout(builder.AttachmentLayout.carousel)
-    msg.attachments([
-        new builder.HeroCard(session)
-            .title("請選擇您要使用的語言")
-            .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')])
-            .buttons([
-                builder.CardAction.imBack(session, "中文", "中文 (1)"),
-                builder.CardAction.imBack(session, "English", "English (1)"),
-                builder.CardAction.imBack(session, "简中", "簡中 (1)")
-            ])
-    ]);
-    session.send(msg).endDialog();
-}).triggerAction({ matches: /^(語言|language|语言)/i });
+bot.dialog('language', [
+    function (session) {
+        console.log("-----language part-----");
+        var msg = new builder.Message(session);
+        msg.attachmentLayout(builder.AttachmentLayout.carousel)
+        msg.attachments([
+            new builder.HeroCard(session)
+                .title("請選擇您要使用的語言")
+                .text("What's your preferred language?")
+                .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')])
+                .buttons([
+                    builder.CardAction.imBack(session, "中文", "中文 (1)"),
+                    builder.CardAction.imBack(session, "English", "English (1)"),
+                    builder.CardAction.imBack(session, "简中", "簡中 (1)")
+                ])
+        ]);
+        session.send(msg);
+    },
+    function (session, results) {
+        console.log(results);
+        session.endDialogWithResult({
+            response: results.response
+        });
+    }
+]).triggerAction({ matches: /^(語言|language|语言)/i });
 
 bot.dialog('catchData', function (session, data) {
     console.log("-----catchData part-----");
