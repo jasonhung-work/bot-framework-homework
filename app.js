@@ -43,9 +43,15 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 
 // Create your bot with a function to receive messages from the user
 var inMemoryStorage = new builder.MemoryBotStorage();
-var bot = new builder.UniversalBot(connector, function (session) {
-    session.beginDialog('language');
-}).set('storage', inMemoryStorage); // Register in-memory storage
+var bot = new builder.UniversalBot(connector, [
+    function (session) {
+        session.beginDialog('language');
+    },
+    function (session, results) {
+        console.log(results);
+        session.endDialog();
+    }
+]).set('storage', inMemoryStorage); // Register in-memory storage
 
 bot.dialog('isRepair', [
     function (session, args) {
