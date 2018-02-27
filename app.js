@@ -49,6 +49,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
 bot.dialog('isRepair', [
     function (session, args) {
+        console.log("-----isRepair part-----");
         session.dialogData.language = args.intent.matched[0].input;
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
         builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 3 });
@@ -81,6 +82,7 @@ bot.dialog('isRepair', [
 
 // Add dialog to return list of shirts available
 bot.dialog('language', function (session) {
+    console.log("-----language part-----");
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
@@ -98,6 +100,7 @@ bot.dialog('language', function (session) {
 }).triggerAction({ matches: /^(語言|language|语言)/i });
 
 bot.dialog('catchData', function (session, data) {
+    console.log("-----catchData part-----");
     console.log(data);
     session.endDialog();
 }).triggerAction({ matches: /(謝謝您的光臨，願您一切順心，再見！)/i });
