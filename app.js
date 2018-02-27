@@ -43,23 +43,9 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 
 // Create your bot with a function to receive messages from the user
 var inMemoryStorage = new builder.MemoryBotStorage();
-var bot = new builder.UniversalBot(connector, [
-    function (session) {
-        session.beginDialog('language');
-    },
-    function (session, results) {
-        if (results.response.language) {
-            session.beginDialog('isRepair');
-        }
-        else {
-            session.endDialog("謝謝您的光臨，願您一切順心，再見！");
-        }
-    },
-    function (session, results) {
-        console.log(results);
-        session.endDialog();
-    }
-]).set('storage', inMemoryStorage); // Register in-memory storage
+var bot = new builder.UniversalBot(connector, function (session) {
+    session.beginDialog('language');
+}).set('storage', inMemoryStorage); // Register in-memory storage
 
 bot.dialog('isRepair', [
     function (session, args) {
@@ -75,7 +61,7 @@ bot.dialog('isRepair', [
         else {
             session.send("謝謝您的光臨，願您一切順心，再見！");
             session.endDialogWithResult({
-                response: { isRepair: results.response.entity}
+                response: { isRepair: results.response.entity }
             });
         }
     },
@@ -110,3 +96,8 @@ bot.dialog('language', function (session) {
     ]);
     session.send(msg).endDialog();
 }).triggerAction({ matches: /^(語言|language|语言)/i });
+
+bot.dialog('catchData', function (session, data) {
+    console.log(data);
+    session.endDialog();
+}).triggerAction({ matches: /(謝謝您的光臨，願您一切順心，再見！)/i });
