@@ -39,14 +39,13 @@ app.post('/api/messages', connector.listen());
 app.use(express.static("resource"));
 app.get("/language", function (request, response) {
     console.log("GET language picture");
-    response.setHeader("Content-Type", "image/jpeg")
+    request.header("Content-Type", "image/jpeg")
     fs.readFile(__dirname + '/resource/language.jpg', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
             this.res.send(err);
             return;
         }
-        console.log(data);
         this.res.send(data);
     }.bind({ req: request, res: response }));
     response.end();
