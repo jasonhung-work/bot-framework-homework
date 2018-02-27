@@ -41,11 +41,11 @@ app.get("/language", function (request, response) {
     console.log("GET language picture");
     fs.readFile(__dirname + '/resource/language.jpg', 'utf8', function (err, data) {
         if (err) {
-            console.log(err);
+            console.log("err:" + err);
             this.res.send(err);
             return;
         }
-        this.res.writeHead(200, {'Content-Type': 'image/jpeg'});
+        this.req.writeHead(200, {'Content-Type': 'image/jpeg'});
         this.res.send(data);
     }.bind({ req: request, res: response }));
 });
