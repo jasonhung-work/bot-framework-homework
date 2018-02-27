@@ -39,7 +39,6 @@ app.post('/api/messages', connector.listen());
 app.use(express.static("resource"));
 app.get('/download/:file', function (request, response) {
     var filename = request.params.file;
-    console.log(filename);
     var stream = require('fs').createReadStream(__dirname + '/resource/' + filename);
     stream.pipe(response);
     response.clearCookie();
@@ -94,6 +93,11 @@ bot.dialog('language', function (session) {
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
             .images([builder.CardImage.create(session, 'https://jason-hung.azurewebsites.net/download/language.jpg')])
+            .buttons([
+                builder.CardAction.imBack(session, "中文", "中文 (1)"),
+                builder.CardAction.imBack(session, "English", "English (1)"),
+                builder.CardAction.imBack(session, "简中", "簡中 (1)")
+            ])
     ]);
     session.send(msg).endDialog();
 }).triggerAction({ matches: /^(語言|language|语言)/i });
