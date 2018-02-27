@@ -48,7 +48,6 @@ app.get("/language", function (request, response) {
         }
         this.res.send(data);
     }.bind({ req: request, res: response }));
-    response.end();
 });
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
