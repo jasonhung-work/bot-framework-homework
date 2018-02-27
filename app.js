@@ -80,13 +80,15 @@ bot.dialog('isRepair', [
 // Add dialog to return list of shirts available
 bot.dialog('language', function (session) {
     console.log("-----language part-----");
+    console.log(__dirname);
+    console.log(__dirname + '/language.jpg');
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
         new builder.HeroCard(session)
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, __dirname + './language.jpg')])
+            .images([builder.CardImage.create(session, __dirname + '/language.jpg')])
             .buttons([
                 builder.CardAction.imBack(session, "中文", "中文 (1)"),
                 builder.CardAction.imBack(session, "English", "English (1)"),
