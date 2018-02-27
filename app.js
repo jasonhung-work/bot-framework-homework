@@ -74,7 +74,8 @@ bot.dialog('language', [
 ]);
 
 bot.dialog('isRepair', [
-    function (session) {
+    function (session, args) {
+        console.log(args);
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
         builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 3 });
     },
@@ -102,32 +103,25 @@ bot.dialog('isRepair', [
             response: { isRepair: session.dialogData.isRepair, phone: session.dialogData.phone, customerNo: session.dialogData.customerNo }
         });
     }
-]);
+]).triggerAction({ matches: /^(中文|English|简中)/i });;
 
 // Add dialog to return list of shirts available
-bot.dialog('showShirts', function (session) {
+bot.dialog('language', function (session) {
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
         new builder.HeroCard(session)
-            .title("Classic White T-Shirt")
-            .subtitle("100% Soft and Luxurious Cotton")
-            .text("Price is $25 and carried in sizes (S, M, L, and XL)")
+            .title("請選擇您要使用的語言")
+            .text("What's your preferred language?")
             .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')])
             .buttons([
-                builder.CardAction.imBack(session, "buy classic white t-shirt", "Buy")
-            ]),
-        new builder.HeroCard(session)
-            .title("Classic Gray T-Shirt")
-            .subtitle("100% Soft and Luxurious Cotton")
-            .text("Price is $25 and carried in sizes (S, M, L, and XL)")
-            .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/grayshirt.png')])
-            .buttons([
-                builder.CardAction.imBack(session, "buy classic gray t-shirt", "Buy")
+                builder.CardAction.imBack(session, "中文", "中文 (1)"),
+                builder.CardAction.imBack(session, "English", "English (1)"),
+                builder.CardAction.imBack(session, "简中", "簡中 (1)")
             ])
     ]);
     session.send(msg).endDialog();
-}).triggerAction({ matches: /^(show|list)/i });
+}).triggerAction({ matches: /^(語言|language|语言)/i });
 
 bot.dialog('buyButtonClick', [
     function (session, args, next) {
