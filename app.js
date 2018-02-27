@@ -36,7 +36,7 @@ app.post('/api/messages', connector.listen());
 * We provide adapters for Azure Table, CosmosDb, SQL Azure, or you can implement your own!
 * For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
 * ---------------------------------------------------------------------------------------- */
-
+app.use(express.static("resource"));
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
@@ -45,19 +45,19 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, function (session) {
     session.beginDialog('language');
-    console.log(session.dialogData);
+    console.log(session.userData);
 }).set('storage', inMemoryStorage); // Register in-memory storage
 
 bot.dialog('isRepair', [
     function (session, args) {
         console.log("-----isRepair part-----");
-        session.dialogData.language = args.intent.matched[0];
+        session.userData.language = args.intent.matched[0];
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
         builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 3 });
     },
     function (session, results) {
         if (results.response.entity == "yes") {
-            session.dialogData.isRepair = "yes";
+            session.userdata.isRepair = "yes";
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
@@ -66,12 +66,12 @@ bot.dialog('isRepair', [
         }
     },
     function (session, results) {
-        session.dialogData.customerNo = results.response;
+        session.userData.customerNo = results.response;
         session.send(`您輸入的是: ${session.dialogData.customerNo}`);
         builder.Prompts.text(session, "請輸入您電話號碼");
     },
     function (session, results) {
-        session.dialogData.phone = results.response;
+        session.userData.phone = results.response;
         session.save();
         session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`).endDialog();
     }
@@ -86,7 +86,7 @@ bot.dialog('language', function (session) {
         new builder.HeroCard(session)
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')])
+            .images([builder.CardImage.create(session, __dirname + './language.jpg')])
             .buttons([
                 builder.CardAction.imBack(session, "中文", "中文 (1)"),
                 builder.CardAction.imBack(session, "English", "English (1)"),
