@@ -51,6 +51,8 @@ bot.dialog('isRepair', [
     function (session, args) {
         console.log("-----isRepair part-----");
         console.log(args);
+        console.log(args.intent);
+        console.log(args.intent.matched[0]);
         session.dialogData.language = args.intent.matched[0].input;
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
         builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 3 });
