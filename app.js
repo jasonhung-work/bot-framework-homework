@@ -39,8 +39,7 @@ app.post('/api/messages', connector.listen());
 app.use(express.static("resource"));
 app.get("/language", function (request, response) {
     console.log("GET language picture");
-    console.log(__dirname);
-    fs.readFile(__dirname + '/language.jpg', 'utf8', function (err, data) {
+    fs.readFile(__dirname + '/resource/language.jpg', 'utf8', function (err, data) {
         if (err) {
             console.log(err);
             this.res.send(err);
