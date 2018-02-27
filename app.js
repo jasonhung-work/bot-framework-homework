@@ -39,6 +39,7 @@ app.post('/api/messages', connector.listen());
 app.use(express.static("resource"));
 app.get('/download/:file', function (request, response) {
     var filename = request.params.file;
+    console.log(filename);
     var stream = require('fs').createReadStream(__dirname + '/resource/' + filename);
     stream.pipe(response);
     response.clearCookie();
