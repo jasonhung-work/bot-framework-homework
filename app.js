@@ -45,6 +45,7 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, function (session) {
     session.beginDialog('language');
+    console.log(session.dialogData);
 }).set('storage', inMemoryStorage); // Register in-memory storage
 
 bot.dialog('isRepair', [
@@ -60,10 +61,8 @@ bot.dialog('isRepair', [
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
-            session.send("謝謝您的光臨，願您一切順心，再見！");
-            session.endDialogWithResult({
-                response: { isRepair: results.response.entity }
-            });
+            session.save();
+            session.send("謝謝您的光臨，願您一切順心，再見！").endDialog();
         }
     },
     function (session, results) {
@@ -74,7 +73,6 @@ bot.dialog('isRepair', [
     function (session, results) {
         session.dialogData.phone = results.response;
         session.save();
-        console.log(session);
         session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`).endDialog();
     }
 ]).triggerAction({ matches: /^(中文|English|简中)/i });;
