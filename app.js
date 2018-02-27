@@ -50,7 +50,7 @@ app.get("/language", function (request, response) {
 });
 app.get('/download', function (request, response) {
     var filename = 'language.jpg';
-    var stream = require('fs').createReadStream('/resource/' + filename);
+    var stream = require('fs').createReadStream(__dirname + '/resource/' + filename);
     stream.pipe(response);
     response.clearCookie();
 });
