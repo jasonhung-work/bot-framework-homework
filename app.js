@@ -44,7 +44,7 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 // Create your bot with a function to receive messages from the user
 var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, [
-    function () {
+    function (session) {
         session.beginDialog('language');
     },
     function (session, results) {
@@ -61,21 +61,9 @@ var bot = new builder.UniversalBot(connector, [
     }
 ]).set('storage', inMemoryStorage); // Register in-memory storage
 
-// bot.dialog('language', [
-//     function (session) {
-//         session.send("請選擇您要使用的語言");
-//         builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
-//     },
-//     function (session, results) {
-//         session.endDialogWithResult({
-//             response: { language: results.response.entity }
-//         });
-//     }
-// ]);
-
 bot.dialog('isRepair', [
     function (session, args) {
-        console.log(args);
+        session.dialogData.language = args.intent.matched[0].input;
         session.send("歡迎光臨大同世界科技０８００報修系統，您可以在這裡取得大同世界科技客服中心的服務");
         builder.Prompts.choice(session, "請問您是要進行故障報修嗎?", "yes|no", { listStyle: 3 });
     },
@@ -100,7 +88,7 @@ bot.dialog('isRepair', [
         session.dialogData.phone = results.response;
         session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`)
         session.endDialogWithResult({
-            response: { isRepair: session.dialogData.isRepair, phone: session.dialogData.phone, customerNo: session.dialogData.customerNo }
+            response: { language: session.dialogData.language, isRepair: session.dialogData.isRepair, phone: session.dialogData.phone, customerNo: session.dialogData.customerNo }
         });
     }
 ]).triggerAction({ matches: /^(中文|English|简中)/i });;
@@ -122,48 +110,3 @@ bot.dialog('language', function (session) {
     ]);
     session.send(msg).endDialog();
 }).triggerAction({ matches: /^(語言|language|语言)/i });
-
-bot.dialog('buyButtonClick', [
-    function (session, args, next) {
-        console.log(args);
-        // Get color and optional size from users utterance
-        var utterance = args.intent.matched[0];
-        var color = /(white|gray)/i.exec(utterance);
-        var size = /\b(Extra Large|Large|Medium|Small)\b/i.exec(utterance);
-        if (color) {
-            // Initialize cart item
-            var item = session.dialogData.item = { 
-                product: "classic " + color[0].toLowerCase() + " t-shirt",
-                size: size ? size[0].toLowerCase() : null,
-                price: 25.0,
-                qty: 1
-            };
-            if (!item.size) {
-                // Prompt for size
-                builder.Prompts.choice(session, "What size would you like?", "Small|Medium|Large|Extra Large");
-            } else {
-                //Skip to next waterfall step
-                next();
-            }
-        } else {
-            // Invalid product
-            session.send("I'm sorry... That product wasn't found.").endDialog();
-        }   
-    },
-    function (session, results) {
-        // Save size if prompted
-        var item = session.dialogData.item;
-        if (results.response) {
-            item.size = results.response.entity.toLowerCase();
-        }
-
-        // Add to cart
-        if (!session.userData.cart) {
-            session.userData.cart = [];
-        }
-        session.userData.cart.push(item);
-
-        // Send confirmation to users
-        session.send("A '%(size)s %(product)s' has been added to your cart.", item).endDialog();
-    }
-]).triggerAction({ matches: /(buy|add)\s.*shirt/i });
