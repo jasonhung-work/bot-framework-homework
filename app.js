@@ -61,19 +61,20 @@ bot.dialog('isRepair', [
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
+            session.userData.isRepair = "no";
             session.save();
             session.send("謝謝您的光臨，願您一切順心，再見！").endDialog();
         }
     },
     function (session, results) {
         session.userData.customerNo = results.response;
-        session.send(`您輸入的是: ${session.dialogData.customerNo}`);
+        session.send(`您輸入的是: ${session.userData.customerNo}`);
         builder.Prompts.text(session, "請輸入您電話號碼");
     },
     function (session, results) {
         session.userData.phone = results.response;
         session.save();
-        session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`).endDialog();
+        session.send(`您輸入的是: ${session.userData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`).endDialog();
     }
 ]).triggerAction({ matches: /^(中文|English|简中)/i });;
 
@@ -81,14 +82,14 @@ bot.dialog('isRepair', [
 bot.dialog('language', function (session) {
     console.log("-----language part-----");
     console.log(__dirname);
-    console.log(__dirname + '/language.jpg');
+    console.log(__dirname + '\language.jpg');
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
         new builder.HeroCard(session)
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, __dirname + '/language.jpg')])
+            .images([builder.CardImage.create(session, __dirname + '\language.jpg')])
             .buttons([
                 builder.CardAction.imBack(session, "中文", "中文 (1)"),
                 builder.CardAction.imBack(session, "English", "English (1)"),
