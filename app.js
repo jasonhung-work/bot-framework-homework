@@ -57,7 +57,7 @@ bot.dialog('isRepair', [
     },
     function (session, results) {
         if (results.response.entity == "yes") {
-            session.userdata.isRepair = "yes";
+            session.userData.isRepair = "yes";
             builder.Prompts.number(session, "請輸入您的統一編號");
         }
         else {
