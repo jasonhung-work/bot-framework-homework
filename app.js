@@ -131,6 +131,7 @@ bot.dialog('showShirts', function (session) {
 
 bot.dialog('buyButtonClick', [
     function (session, args, next) {
+        console.log(args);
         // Get color and optional size from users utterance
         var utterance = args.intent.matched[0];
         var color = /(white|gray)/i.exec(utterance);
