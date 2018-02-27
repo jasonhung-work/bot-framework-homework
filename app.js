@@ -92,6 +92,7 @@ bot.dialog('isRepair', [
         session.send(msg);
     },
     function (session, results) {
+        console.log(results);
         if (results.response.entity == "yes") {
             session.dialogData.isRepair = "yes";
             builder.Prompts.number(session, "請輸入您的統一編號");
