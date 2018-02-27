@@ -8,7 +8,7 @@ var port = process.env.PORT || 3978;
 var http = require("http");
 var builder = require('botbuilder');
 var botbuilder_azure = require("botbuilder-azure");
-
+var fs = require('graceful-fs');
 // Setup Restify Server
 var server = http.Server(app).listen(port, function () {
     console.log('%s listening to %s', server.name, server.url);
@@ -37,6 +37,18 @@ app.post('/api/messages', connector.listen());
 * For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
 * ---------------------------------------------------------------------------------------- */
 app.use(express.static("resource"));
+app.get("/language", function (request, response) {
+    console.log("GET language picture");
+    console.log(__dirname);
+    fs.readFile(__dirname + '/language.jpg', 'utf8', function (err, data) {
+        if (err) {
+            console.log(err);
+            this.res.send(err);
+            return;
+        }
+        this.res.send(data);
+    }.bind({ req: request, res: response }));
+});
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
@@ -80,15 +92,13 @@ bot.dialog('isRepair', [
 
 // Add dialog to return list of shirts available
 bot.dialog('language', function (session) {
-    console.log("-----language part-----");
-    console.log(__dirname + './resource/language.jpg');
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
         new builder.HeroCard(session)
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, __dirname + './resource/language.jpg')])
+            .images([builder.CardImage.create(session, 'https://jason-hung.azurewebsites.net/language')])
             .buttons([
                 builder.CardAction.imBack(session, "中文", "中文 (1)"),
                 builder.CardAction.imBack(session, "English", "English (1)"),
