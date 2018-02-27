@@ -45,7 +45,7 @@ app.get("/language", function (request, response) {
             this.res.send(err);
             return;
         }
-        this.req.writeHead(200, {'Content-Type': 'image/jpeg'});
+        this.res.writeHead(200, {'Content-Type': 'image/jpeg'});
         this.res.send(data);
     }.bind({ req: request, res: response }));
 });
