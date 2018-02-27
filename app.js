@@ -61,17 +61,17 @@ var bot = new builder.UniversalBot(connector, [
     }
 ]).set('storage', inMemoryStorage); // Register in-memory storage
 
-bot.dialog('language', [
-    function (session) {
-        session.send("請選擇您要使用的語言");
-        builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
-    },
-    function (session, results) {
-        session.endDialogWithResult({
-            response: { language: results.response.entity }
-        });
-    }
-]);
+// bot.dialog('language', [
+//     function (session) {
+//         session.send("請選擇您要使用的語言");
+//         builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
+//     },
+//     function (session, results) {
+//         session.endDialogWithResult({
+//             response: { language: results.response.entity }
+//         });
+//     }
+// ]);
 
 bot.dialog('isRepair', [
     function (session, args) {
