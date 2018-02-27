@@ -44,10 +44,15 @@ app.get("/language", function (request, response) {
         if (err) {
             console.log(err);
             this.res.send(err);
-            return;
         }
         this.res.send(data);
     }.bind({ req: request, res: response }));
+});
+app.get('/download', function (request, response) {
+    var filename = 'language.jpg';
+    var stream = require('fs').createReadStream('/resource/' + filename);
+    stream.pipe(response);
+    response.clearCookie();
 });
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
