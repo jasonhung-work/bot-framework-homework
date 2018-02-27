@@ -73,11 +73,10 @@ bot.dialog('isRepair', [
     },
     function (session, results) {
         session.dialogData.phone = results.response;
-        session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`);
-        console.log("-----isRepair end-----");
-        session.endDialogWithResult({
+        session.send(`您輸入的是: ${session.dialogData.phone} <br/> 謝謝您的光臨，願您一切順心，再見！`).endDialogWithResult({
             response: { language: session.dialogData.language, isRepair: session.dialogData.isRepair, phone: session.dialogData.phone, customerNo: session.dialogData.customerNo }
         });
+        console.log("-----isRepair end-----");
     }
 ]).triggerAction({ matches: /^(中文|English|简中)/i });;
 
