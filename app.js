@@ -103,7 +103,7 @@ bot.dialog('language', function (session) {
         new builder.HeroCard(session)
             .title("請選擇您要使用的語言")
             .text("What's your preferred language?")
-            .images([builder.CardImage.create(session, 'https://jason-hung.azurewebsites.net/language')])
+            .images([builder.CardImage.create(session, 'https://jason-hung.azurewebsites.net/download')])
             .buttons([
                 builder.CardAction.imBack(session, "中文", "中文 (1)"),
                 builder.CardAction.imBack(session, "English", "English (1)"),
