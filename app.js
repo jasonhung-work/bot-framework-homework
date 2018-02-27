@@ -64,23 +64,9 @@ var bot = new builder.UniversalBot(connector, [
 bot.dialog('language', [
     function (session) {
         session.send("請選擇您要使用的語言");
-        var msg = new builder.Message(session);
-        msg.attachmentLayout(builder.AttachmentLayout.carousel)
-        msg.attachments([
-            new builder.HeroCard(session)
-                .title("請選擇您要使用的語言")
-                .text("What's your preferred language?")
-                .images([builder.CardImage.create(session, 'https://www.google.com.tw/imgres?imgurl=https%3A%2F%2Ffthmb.tqn.com%2FDFWbLgCSeZOjiZ1d_XAWQG_b6LY%3D%2F768x0%2Ffilters%3Ano_upscale()%2Fhello-in-eight-different-languages-185250085-5941fb8c3df78c537b32ecac.jpg&imgrefurl=https%3A%2F%2Fwww.lifewire.com%2Fchange-facebook-language-to-english-2654383&docid=afTvWRj88TJuYM&tbnid=EbzZsBYIQ5ucnM%3A&vet=10ahUKEwj25sy098TZAhWJvrwKHepvDScQMwgnKAIwAg..i&w=768&h=269&safe=strict&bih=954&biw=958&q=language&ved=0ahUKEwj25sy098TZAhWJvrwKHepvDScQMwgnKAIwAg&iact=mrc&uact=8')])
-                .buttons([
-                    builder.CardAction.imBack(session, "中文", "中文 (1)"),
-                    builder.CardAction.imBack(session, "英文", "英文 (1)"),
-                    builder.CardAction.imBack(session, "簡中", "簡中 (1)")
-                ])
-        ]);
-        session.send(msg);
+        builder.Prompts.choice(session, "What's your preferred language?", "中文|英文|簡中", { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
-        console.log(results);
         session.endDialogWithResult({
             response: { language: results.response.entity }
         });
@@ -100,7 +86,7 @@ bot.dialog('isRepair', [
         else {
             session.send("謝謝您的光臨，願您一切順心，再見！");
             session.endDialogWithResult({
-                response: { isRepair: results.response.entity}
+                response: { isRepair: results.response.entity }
             });
         }
     },
@@ -118,7 +104,7 @@ bot.dialog('isRepair', [
     }
 ]);
 
-bot.dialog('showShirts', function (session) {
+bot.dialog('showShirts', [function (session) {
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
@@ -129,7 +115,7 @@ bot.dialog('showShirts', function (session) {
             .buttons([
                 builder.CardAction.imBack(session, "中文", "中文 (1)"),
                 builder.CardAction.imBack(session, "英文", "英文 (1)"),
-                builder.CardAction.imBack(session, "簡中", "簡中 (1)"),
+                builder.CardAction.imBack(session, "簡中", "簡中 (1)")
             ]),
         new builder.HeroCard(session)
             .title("Classic Gray T-Shirt")
@@ -140,5 +126,9 @@ bot.dialog('showShirts', function (session) {
                 builder.CardAction.imBack(session, "buy classic gray t-shirt", "Buy")
             ])
     ]);
-    session.send(msg).endDialog();
-}).triggerAction({ matches: /^(show|list)/i });
+    session.send(msg);
+},
+function (session, results) {
+    console.log(results);
+    session.endDialog();
+}]).triggerAction({ matches: /^(show|list)/i });
