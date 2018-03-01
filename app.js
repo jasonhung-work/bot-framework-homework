@@ -49,6 +49,7 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 
 // Create your bot with a function to receive messages from the user
 var inMemoryStorage = new builder.MemoryBotStorage();
+var userStore = [];
 var bot = new builder.UniversalBot(connector, function (session) {
     var address = session.message.address;
     userStore.push(address);
