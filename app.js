@@ -61,6 +61,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
 setInterval(function () {
     var newAddresses = userStore.splice(0);
+    console.log(newAddresses);
     newAddresses.forEach(function (address) {
 
         console.log('Starting survey for address:', address);
