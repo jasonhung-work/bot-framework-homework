@@ -50,10 +50,37 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 // Create your bot with a function to receive messages from the user
 var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, function (session) {
-    console.log(session);
-    session.beginDialog('language');
+    var address = session.message.address;
+    userStore.push(address);
+
+    // end current dialog
+    session.endDialog('You\'ve been invited to a survey! It will start in a few seconds...');
     console.log(session.userData);
 }).set('storage', inMemoryStorage); // Register in-memory storage
+
+setInterval(function () {
+    var newAddresses = userStore.splice(0);
+    newAddresses.forEach(function (address) {
+
+        console.log('Starting survey for address:', address);
+
+        // new conversation address, copy without conversationId
+        var newConversationAddress = Object.assign({}, address);
+        delete newConversationAddress.conversation;
+
+        // start survey dialog
+        bot.beginDialog(newConversationAddress, 'language', null, function (err) {
+            if (err) {
+                // error ocurred while starting new conversation. Channel not supported?
+                bot.send(new builder.Message()
+                    .text('This channel does not support this operation: ' + err.message)
+                    .address(address));
+            }
+        });
+
+    });
+}, 5000);
+
 
 bot.dialog('isRepair', [
     function (session, args) {
