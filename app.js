@@ -50,6 +50,7 @@ var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azu
 // Create your bot with a function to receive messages from the user
 var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, function (session) {
+    console.log(session);
     session.beginDialog('language');
     console.log(session.userData);
 }).set('storage', inMemoryStorage); // Register in-memory storage
